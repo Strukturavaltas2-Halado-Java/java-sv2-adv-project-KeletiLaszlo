@@ -1,0 +1,39 @@
+### List all passengers
+
+GET http://localhost:8080/api/passengers
+Accept: application/json
+
+### List passenger by id
+
+GET http://localhost:8080/api/passengers/1
+Accept: application/json
+
+### Create passenger
+
+POST http://localhost:8080/api/passengers
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "John Doe",
+  "dateOfBirth": "1990-01-01"
+}
+
+### Modify passenger
+
+PUT http://localhost:8080/api/passengers/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Jack Doe",
+  "dateOfBirth": "1995-01-01"
+}
+
+### Delete passenger by id
+
+DELETE http://localhost:8080/api/passengers/1
+
+### Delete all passenger
+
+DELETE http://localhost:8080/api/passengers/

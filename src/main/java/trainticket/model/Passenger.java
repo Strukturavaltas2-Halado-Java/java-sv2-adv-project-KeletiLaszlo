@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,4 +28,9 @@ public class Passenger {
 
     @OneToMany(mappedBy = "passenger")
     private List<Ticket> tickets = new ArrayList<>();
+
+    public Passenger(String name, LocalDate dateOfBirth) {
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+    }
 }

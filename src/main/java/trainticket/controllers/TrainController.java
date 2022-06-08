@@ -39,7 +39,7 @@ public class TrainController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public TrainDto createTrain(@PathVariable long id, @Valid @RequestBody ModifyTrainCommand modifyTrainCommand) {
+    public TrainDto modifyTrain(@PathVariable long id, @Valid @RequestBody ModifyTrainCommand modifyTrainCommand) {
         return service.modifyTrain(id, modifyTrainCommand);
     }
 
