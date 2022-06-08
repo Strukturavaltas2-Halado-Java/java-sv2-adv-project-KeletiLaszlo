@@ -28,4 +28,10 @@ public class Discount {
 
     @OneToMany(mappedBy = "discount")
     private List<Ticket> ticket;
+
+    public Discount(int fromAge, int toAge, int discountValue) {
+        this.fromAge = fromAge;
+        this.toAge = toAge;
+        this.discountValue = discountValue;
+    }
 }

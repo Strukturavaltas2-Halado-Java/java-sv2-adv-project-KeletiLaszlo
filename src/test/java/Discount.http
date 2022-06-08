@@ -1,0 +1,21 @@
+### List all discounts
+
+GET http://localhost:8080/api/discounts
+Accept: application/json
+
+### List discount by id
+
+GET http://localhost:8080/api/discounts/1
+Accept: application/json
+
+### List discount by age (5)
+
+GET http://localhost:8080/api/discounts/age?age=5
+Accept: application/json
+
+### List discount by age (6)
+
+GET http://localhost:8080/api/discounts/age?age=6
+Accept: application/json
+
+
