@@ -22,7 +22,7 @@ public class Passenger {
     @Column(name = "passenger_name")
     private String name;
 
-    @Column(name = "fate_of_birth")
+    @Column(name = "date_of_birth")
     private java.time.LocalDate dateOfBirth;
 
     @OneToMany(mappedBy = "passenger")

@@ -19,6 +19,12 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "full_price")
+    private int fullPrice;
+
+    @Column(name = "price_with_discount")
+    private int priceWithDiscount;
+
     @ManyToOne
     @JoinColumn(name = "train_id")
     private Train train;

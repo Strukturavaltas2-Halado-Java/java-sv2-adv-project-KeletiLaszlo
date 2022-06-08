@@ -1,0 +1,49 @@
+### List all trains
+
+GET http://localhost:8080/api/trains
+Accept: application/json
+
+### List train by id
+
+GET http://localhost:8080/api/trains/1
+Accept: application/json
+
+### Create train
+
+POST http://localhost:8080/api/trains
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nameOfTrain": "Nyírség",
+  "trainType": "INTERCITY",
+  "departureTime": "2023-06-09T09:00",
+  "departurePlace": "Szolnok",
+  "arrivalTime": "2023-06-09T10:30",
+  "arrivalPlace": "Budapest Nyugati",
+  "distance": "100"
+}
+
+### Modify train
+
+PUT http://localhost:8080/api/trains/1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "nameOfTrain": "Páva",
+  "trainType": "INTERCITY",
+  "departureTime": "2023-06-09T09:00",
+  "departurePlace": "Szolnok",
+  "arrivalTime": "2023-06-09T10:30",
+  "arrivalPlace": "Budapest Nyugati",
+  "distance": "100"
+}
+
+### Delete train by id
+
+DELETE http://localhost:8080/api/trains/1
+
+### Delete all trains
+
+DELETE http://localhost:8080/api/trains/
