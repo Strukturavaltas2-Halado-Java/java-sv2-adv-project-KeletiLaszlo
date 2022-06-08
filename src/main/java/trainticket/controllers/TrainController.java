@@ -1,6 +1,7 @@
 package trainticket.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import trainticket.dtos.CreateTrainCommand;
@@ -21,7 +22,8 @@ public class TrainController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public List<TrainDto> listAllTrains(@RequestParam Optional<String> departurePlace, @RequestParam Optional<String> arrivalPlace, @RequestParam Optional<LocalDateTime> departureTime) {
+    public List<TrainDto> listAllTrains(@RequestParam Optional<String> departurePlace, @RequestParam Optional<String> arrivalPlace,
+                                        @RequestParam("departureTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Optional<LocalDateTime> departureTime) {
         return service.listAllTrains(departurePlace, arrivalPlace, departureTime);
     }
 

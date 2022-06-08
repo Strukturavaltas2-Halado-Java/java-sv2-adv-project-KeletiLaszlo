@@ -24,10 +24,11 @@ public class TrainService {
 
     private ModelMapper modelMapper;
     private TrainRepository repository;
+
     public List<TrainDto> listAllTrains(Optional<String> departurePlace, Optional<String> arrivalPlace, Optional<LocalDateTime> departureTime) {
-        // TODO filter functions are missing
-        Type targetListType = new TypeToken<List<TrainDto>>(){}.getType();
-        return modelMapper.map(repository.findAll(), targetListType);
+        Type targetListType = new TypeToken<List<TrainDto>>() {
+        }.getType();
+        return modelMapper.map(repository.findAllAndFilter(departurePlace, arrivalPlace, departureTime), targetListType);
     }
 
     public TrainDto findTrainById(long id) {
@@ -73,7 +74,7 @@ public class TrainService {
         train.setArrivalTime(modifyTrainCommand.getArrivalTime());
         train.setArrivalPlace(modifyTrainCommand.getArrivalPlace());
         train.setDistance(modifyTrainCommand.getDistance());
-        return modelMapper.map(train,TrainDto.class);
+        return modelMapper.map(train, TrainDto.class);
     }
 
     private void validateTimes(LocalDateTime departureTime, LocalDateTime arrivalTime) {

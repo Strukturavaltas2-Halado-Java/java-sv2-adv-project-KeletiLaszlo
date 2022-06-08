@@ -1,6 +1,6 @@
 ### List all trains
 
-GET http://localhost:8080/api/trains
+GET http://localhost:8080/api/trains?departurePlace=Szolnok&arrivalPlace=Cegled&departureTime=2023-06-09T09:00
 Accept: application/json
 
 ### List train by id
@@ -20,7 +20,7 @@ Accept: application/json
   "departureTime": "2023-06-09T09:00",
   "departurePlace": "Szolnok",
   "arrivalTime": "2023-06-09T10:30",
-  "arrivalPlace": "Budapest Nyugati",
+  "arrivalPlace": "Cegled",
   "distance": "100"
 }
 
