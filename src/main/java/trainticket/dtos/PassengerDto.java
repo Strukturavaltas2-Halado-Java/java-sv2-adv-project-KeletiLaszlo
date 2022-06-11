@@ -1,10 +1,10 @@
 package trainticket.dtos;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import trainticket.model.Ticket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,5 +21,6 @@ public class PassengerDto {
 
     private java.time.LocalDate dateOfBirth;
 
-    private List<Ticket> tickets = new ArrayList<>();
+    @JsonBackReference
+    private List<TicketDto> tickets = new ArrayList<>();
 }

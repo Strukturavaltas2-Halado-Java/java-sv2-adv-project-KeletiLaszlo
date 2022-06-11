@@ -37,4 +37,11 @@ public class Ticket {
     @JoinColumn(name = "discount_id")
     private Discount discount;
 
+    public Ticket(int fullPrice, int priceWithDiscount, Train train, Passenger passenger, Discount discount) {
+        this.fullPrice = fullPrice;
+        this.priceWithDiscount = priceWithDiscount;
+        this.train = train;
+        this.passenger = passenger;
+        this.discount = discount;
+    }
 }

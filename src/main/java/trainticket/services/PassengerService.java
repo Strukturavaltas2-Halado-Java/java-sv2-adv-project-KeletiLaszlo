@@ -23,7 +23,7 @@ public class PassengerService {
     private PassengerRepository repository;
 
     public List<PassengerDto> listAllPassengers() {
-        Type targetListType = new TypeToken<List<Passenger>>() {
+        Type targetListType = new TypeToken<List<PassengerDto>>() {
         }.getType();
         return modelMapper.map(repository.findAll(), targetListType);
     }

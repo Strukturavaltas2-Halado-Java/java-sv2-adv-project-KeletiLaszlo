@@ -1,10 +1,10 @@
 package trainticket.dtos;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import trainticket.model.Ticket;
 import trainticket.model.TrainType;
 
 import java.time.LocalDateTime;
@@ -32,6 +32,7 @@ public class TrainDto {
 
     private int distance;
 
-    private List<Ticket> tickets = new ArrayList<>();
+    @JsonBackReference
+    private List<TicketDto> tickets = new ArrayList<>();
 
 }
