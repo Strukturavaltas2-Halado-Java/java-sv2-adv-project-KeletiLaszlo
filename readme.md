@@ -140,10 +140,16 @@ segítségével az alkalmazásból Docker image készíthető.
 
 ---
 
+## Virtuális hálózat létrehozás
+`docker network create --driver bridge traintickets-net`
+
 ## MariaDb indítása Dockerben
-`docker run -d -e MYSQL_DATABASE=traintickets -e MYSQL_USER=traintickets -e MYSQL_PASSWORD=traintickets -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -p 3306:3306 --name traintickets-mariadb mariadb`
+`docker run -d -e MYSQL_DATABASE=traintickets -e MYSQL_USER=traintickets -e MYSQL_PASSWORD=traintickets -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --network traintickets-net -p 3306:3306 --name traintickets-mariadb mariadb`
 
 ## Az alkalmazás buildelése
-`mvnw package`
+`mvnw clean package`
 
-`docker build -t traintickets .` 
+`docker build -t trainticketsapp .` 
+
+## Az alkalmazás futtatása dockerben MariaDB-vel
+`docker run -d -e SPRING_DATASOURCE_URL=jdbc:mariadb://traintickets-mariadb/traintickets --network traintickets-net -p 8080:8080 --name trainticketsapp trainticketsapp`
