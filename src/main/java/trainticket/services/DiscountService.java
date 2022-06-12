@@ -5,6 +5,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import trainticket.dtos.DiscountDto;
+import trainticket.exceptions.DiscountNotFoundException;
+import trainticket.model.Discount;
 import trainticket.repositories.DiscountRepository;
 
 import java.lang.reflect.Type;
@@ -23,7 +25,10 @@ public class DiscountService {
     }
 
     public DiscountDto findDiscountById(long id) {
-        return modelMapper.map(repository.findById(id), DiscountDto.class);
+        Discount discount = repository.findById(id).orElseThrow(
+                () -> new DiscountNotFoundException(id)
+        );
+        return modelMapper.map(discount, DiscountDto.class);
     }
 
     public DiscountDto findDiscountByAge(int age) {
