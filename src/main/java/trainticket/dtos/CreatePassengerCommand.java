@@ -17,12 +17,12 @@ import java.time.LocalDate;
 @Setter
 public class CreatePassengerCommand {
 
-    @NotBlank
+    @NotBlank(message = "Name cannot be empty")
     @Schema(description="name of the passenger", example = "John Doe")
     private String name;
 
-    @Past
-    @NotNull
+    @Past(message = "Birth date cannot be in the future")
+    @NotNull(message = "Birth date cannot be empty")
     @Schema(description="passenger's birth date (to computing discounts)", example = "1990-01-01")
     private LocalDate dateOfBirth;
 }
