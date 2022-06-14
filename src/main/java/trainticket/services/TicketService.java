@@ -3,6 +3,7 @@ package trainticket.services;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import trainticket.dtos.CreateTicketCommand;
 import trainticket.dtos.TicketDto;
@@ -61,10 +62,10 @@ public class TicketService {
         int age = Period.between(passenger.getDateOfBirth(), LocalDate.now()).getYears();
         Discount discount = discountRepository.findDiscountByAge(age);
 
-        int fullPrice = (int)Math.ceil(
+        int fullPrice = (int) Math.ceil(
                 TICKET_PRICE_PER_KM * train.getDistance() * train.getTrainType().getPriceMultiplier()
         );
-        int priceWithDiscount = (int)Math.ceil(
+        int priceWithDiscount = (int) Math.ceil(
                 fullPrice - (fullPrice * discount.getDiscountValue() / 100.0)
         );
 
@@ -80,7 +81,11 @@ public class TicketService {
     }
 
     public void deleteTicketById(long id) {
-        ticketRepository.deleteById(id);
+        try {
+            ticketRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException erdae) {
+            throw new TicketNotFoundException(id);
+        }
     }
 
     public void deleteAllTickets() {

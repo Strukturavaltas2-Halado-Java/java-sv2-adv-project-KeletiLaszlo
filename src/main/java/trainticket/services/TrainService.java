@@ -51,7 +51,11 @@ public class TrainService {
     }
 
     public void deleteAllTrains() {
-        repository.deleteAll();
+        try {
+            repository.deleteAll();
+        } catch (DataIntegrityViolationException dive) {
+            throw new TrainConstraintFailsException();
+        }
     }
 
     public TrainDto createTrain(CreateTrainCommand createTrainCommand) {

@@ -10,8 +10,17 @@ public class TrainConstraintFailsException extends AbstractThrowableProblem {
         super(
                 URI.create("/api/trains/train-constraint-fail"),
                 "Train constraint fail",
-                Status.IM_USED,
+                Status.CONFLICT,
                 String.format("Cannot delete a train (id: %d) as long as someone has a ticket for it.", id)
+        );
+    }
+
+    public TrainConstraintFailsException() {
+        super(
+                URI.create("/api/trains/train-constraint-fail"),
+                "Train constraint fail",
+                Status.CONFLICT,
+                "Cannot delete trains as long as someone has a ticket for it."
         );
     }
 }

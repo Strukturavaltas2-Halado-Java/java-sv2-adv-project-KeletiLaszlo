@@ -10,8 +10,17 @@ public class PassengerConstraintFailsException extends AbstractThrowableProblem 
         super(
                 URI.create("/api/passengers/passenger-constraint-fail"),
                 "Passenger constraint fail",
-                Status.IM_USED,
+                Status.CONFLICT,
                 String.format("Cannot delete a passenger (id: %d) until it has tickets.", id)
+        );
+    }
+
+    public PassengerConstraintFailsException() {
+        super(
+                URI.create("/api/passengers/passenger-constraint-fail"),
+                "Passenger constraint fail",
+                Status.CONFLICT,
+                "Cannot delete passengers until it has tickets."
         );
     }
 }

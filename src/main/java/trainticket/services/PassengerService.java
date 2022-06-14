@@ -11,8 +11,6 @@ import trainticket.dtos.ModifyPassengerCommand;
 import trainticket.dtos.PassengerDto;
 import trainticket.exceptions.PassengerConstraintFailsException;
 import trainticket.exceptions.PassengerNotFoundException;
-import trainticket.exceptions.TrainConstraintFailsException;
-import trainticket.exceptions.TrainNotFoundException;
 import trainticket.model.Passenger;
 import trainticket.repositories.PassengerRepository;
 
@@ -70,6 +68,10 @@ public class PassengerService {
     }
 
     public void deleteAllPassengers() {
-        repository.deleteAll();
+        try {
+            repository.deleteAll();
+        } catch (DataIntegrityViolationException dive) {
+            throw new PassengerConstraintFailsException();
+        }
     }
 }
