@@ -264,6 +264,17 @@ class PassengerControllerIT {
     }
 
     @Test
+    @DisplayName("Delete passenger by invalid id")
+    void testDeletePassengerByInvalidId() {
+        webTestClient.delete()
+                .uri("/api/passengers/{id}", -1)
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody(Problem.class)
+                .value(p-> assertThat(p.getDetail()).isEqualTo("Passenger not found by id: -1"));
+    }
+
+    @Test
     @DisplayName("Delete all passengers")
     void testDeleteAllPassengers() {
         webTestClient.delete()

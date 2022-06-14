@@ -3,11 +3,16 @@ package trainticket.services;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import trainticket.dtos.CreatePassengerCommand;
 import trainticket.dtos.ModifyPassengerCommand;
 import trainticket.dtos.PassengerDto;
+import trainticket.exceptions.PassengerConstraintFailsException;
 import trainticket.exceptions.PassengerNotFoundException;
+import trainticket.exceptions.TrainConstraintFailsException;
+import trainticket.exceptions.TrainNotFoundException;
 import trainticket.model.Passenger;
 import trainticket.repositories.PassengerRepository;
 
@@ -51,11 +56,17 @@ public class PassengerService {
 
         passenger.setName(modifyTrainCommand.getName());
         passenger.setDateOfBirth(modifyTrainCommand.getDateOfBirth());
-        return modelMapper.map(passenger,PassengerDto.class);
+        return modelMapper.map(passenger, PassengerDto.class);
     }
 
     public void deletePassengerById(long id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException erdae) {
+            throw new PassengerNotFoundException(id);
+        } catch (DataIntegrityViolationException dive) {
+            throw new PassengerConstraintFailsException(id);
+        }
     }
 
     public void deleteAllPassengers() {

@@ -3,11 +3,14 @@ package trainticket.services;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import trainticket.dtos.CreateTrainCommand;
 import trainticket.dtos.ModifyTrainCommand;
 import trainticket.dtos.TrainDto;
 import trainticket.exceptions.IllegalTimesGivenExceptions;
+import trainticket.exceptions.TrainConstraintFailsException;
 import trainticket.exceptions.TrainNotFoundException;
 import trainticket.model.Train;
 import trainticket.repositories.TrainRepository;
@@ -38,7 +41,13 @@ public class TrainService {
     }
 
     public void deleteTrainById(long id) {
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException erdae) {
+            throw new TrainNotFoundException(id);
+        } catch (DataIntegrityViolationException dive) {
+            throw new TrainConstraintFailsException(id);
+        }
     }
 
     public void deleteAllTrains() {

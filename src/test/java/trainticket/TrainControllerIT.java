@@ -453,6 +453,17 @@ class TrainControllerIT {
     }
 
     @Test
+    @DisplayName("Delete train by invalid id")
+    void testDeleteTrainByInvalidId() {
+        webTestClient.delete()
+                .uri("/api/trains/{id}",-1)
+                .exchange()
+                .expectStatus().isNotFound()
+                        .expectBody(Problem.class)
+                                .value(p->assertThat(p.getDetail()).isEqualTo("Train not found by id: -1"));
+    }
+
+    @Test
     @DisplayName("Delete all trains")
     void testDeleteAllTrains() {
         webTestClient.delete()
