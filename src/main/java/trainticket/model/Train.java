@@ -54,4 +54,8 @@ public class Train {
         this.arrivalPlace = arrivalPlace;
         this.distance = distance;
     }
+
+    public void addTicket(Ticket ticket) {
+        tickets.add(ticket);
+    }
 }

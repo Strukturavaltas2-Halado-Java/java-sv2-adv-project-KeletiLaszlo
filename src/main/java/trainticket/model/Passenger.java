@@ -33,4 +33,8 @@ public class Passenger {
         this.name = name;
         this.dateOfBirth = dateOfBirth;
     }
+
+    public void addTicket(Ticket ticket) {
+        tickets.add(ticket);
+    }
 }

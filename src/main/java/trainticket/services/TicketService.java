@@ -19,6 +19,7 @@ import trainticket.repositories.PassengerRepository;
 import trainticket.repositories.TicketRepository;
 import trainticket.repositories.TrainRepository;
 
+import javax.transaction.Transactional;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.Period;
@@ -50,6 +51,7 @@ public class TicketService {
         return modelMapper.map(ticket, TicketDto.class);
     }
 
+    @Transactional
     public TicketDto buyTicket(CreateTicketCommand createTicketCommand) {
         Train train = trainRepository.findById(createTicketCommand.getTrainId()).orElseThrow(
                 () -> new TrainNotFoundException(createTicketCommand.getTrainId())
@@ -77,6 +79,8 @@ public class TicketService {
                 discount
         );
 
+        train.addTicket(ticket);
+        passenger.addTicket(ticket);
         return modelMapper.map(ticketRepository.save(ticket), TicketDto.class);
     }
 
