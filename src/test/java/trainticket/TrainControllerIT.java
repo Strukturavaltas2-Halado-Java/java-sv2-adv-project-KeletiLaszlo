@@ -42,7 +42,6 @@ class TrainControllerIT {
 
     @BeforeEach
     void init() {
-        trainRepository.deleteAll();
         Train trainOne = new Train("Fecske", TrainType.PASSENGER_TRAIN, LocalDateTime.of(2023,1,1,9,0),"Cegléd",
                 LocalDateTime.of(2023,1,1,10,0),"Zugló",60);
         Train trainTwo = new Train("Z56", TrainType.FAST_TRAIN, LocalDateTime.of(2023,1,1,9,0),"Szolnok",

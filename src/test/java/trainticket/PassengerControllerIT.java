@@ -39,8 +39,6 @@ class PassengerControllerIT {
 
     @BeforeEach
     void init() {
-        passengerRepository.deleteAll();
-
         Passenger passengerOne = new Passenger("John Doe", LocalDate.of(1990, 1, 1));
         Passenger passengerTwo = new Passenger("Jane Doe", LocalDate.of(2020, 1, 1));
         Passenger passengerThree = new Passenger("Jack Doe", LocalDate.of(2009, 1, 1));

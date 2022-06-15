@@ -1,0 +1,387 @@
+<!DOCTYPE html []>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="author" content="MarkdownViewer++" />
+    <title>readme.md</title>
+    <style type="text/css">
+            
+/* Avoid page breaks inside the most common attributes, especially for exports (i.e. PDF) */
+td, h1, h2, h3, h4, h5, p, ul, ol, li {
+    page-break-inside: avoid; 
+}
+
+        </style>
+  </head>
+  <body>
+    <h1 id="vizsgaremek-vonatjegy-applikacio">Vizsgaremek - vonatjegy applikáció</h1>
+    <h2 id="leiras">Leírás</h2>
+    <p>Jelen vizsgaremek egy vonatjegy applikáció egyszerűsített változatát hivatott megvalósítani.
+Az applikációban létrehozhatóak vonatok, utasok. Az utasok kereshetnek számukra megfelelő vonatot,
+majd megválthatják a vonatjegyüket. A vonat keresésénél megadható a kiinduló és a cél állomás és az indulás időpontja.
+A vonatjegy teljes áránál azt veszi alapul, hogy hány kilométer a távolság a két állomás között.
+Az utasok az életkoruk alapján érvényesíthetnek kedvezményt a jegyvásárláskor.</p>
+    <h2 id="hasznalata">Használata</h2>
+    <h3 id="train-vonat">Train - vonat</h3>
+    <p>A <code>Train</code> entitás a következő attribútumokkal rendelkezik:</p>
+    <ul>
+      <li>
+        <code>id</code> (a vonat egyedi azonosítója)</li>
+      <li>
+        <code>nameOfTrain</code> (a vonat neve, nem lehet <code>null</code> és üres, valamint <code>String</code> típusú, legfeljebb 255 karakter hosszú.)</li>
+      <li>
+        <code>trainType</code> (a vonat típusa, ez egy enum a következő értékekkel: <code>PASSENGER_TRAIN</code>, <code>FAST_TRAIN</code>, <code>INTERCITY</code>.)</li>
+      <li>
+        <code>departureTime</code> (a vonat indulási ideje, nem lehet <code>null</code>, valamint <code>LocalDateTime</code> típusú.)</li>
+      <li>
+        <code>departurePlace</code> (a vonat erről az állomásról indul, nem lehet <code>null</code> és üres, valamint <code>String</code> típusú, legfeljebb 255 karakter hosszú.)</li>
+      <li>
+        <code>arrivalTime</code> (a vonat érkezési ideje, nem lehet <code>null</code>, valamint <code>LocalDateTime</code> típusú.)</li>
+      <li>
+        <code>arrivalPlace</code> (a vonat erre az állomásra érkezik, nem lehet <code>null</code> és üres, valamint <code>String</code> típusú, legfeljebb 255 karakter hosszú.)</li>
+      <li>
+        <code>distance</code> (a két állomás távolsága kilométerben, nem lehet <code>0</code> és csak pozitív egész számot vehet fel értéknek.)</li>
+      <li>
+        <code>tickets</code> (a vonatra megváltott jegyek listája, <code>List&lt;Ticket&gt;</code> típusú és OneToMany kétirányú kapcsolatban áll a <code>Ticket</code> entitással.)</li>
+    </ul>
+    <p>A következő végpontokon érjük el az entitást:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>HTTP metódus</th>
+          <th>Végpont</th>
+          <th>Leírás</th>
+          <th style="text-align: center;">HTTP Response státusz</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>
+            <code>"/api/trains"</code>
+          </td>
+          <td>lekérdezi az összes vonatot</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>
+            <code>"/api/trains/{id}"</code>
+          </td>
+          <td>lekérdez egy vonatot <code>id</code> alapján</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td>
+            <code>"/api/trains"</code>
+          </td>
+          <td>létrehoz egy vonatot</td>
+          <td style="text-align: center;">201</td>
+        </tr>
+        <tr>
+          <td>PUT</td>
+          <td>
+            <code>"/api/trains/{id}"</code>
+          </td>
+          <td>módosít egy vonatot <code>id</code> alapján</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>
+            <code>"/api/trains/{id}"</code>
+          </td>
+          <td>
+            <code>id</code> alapján kitöröl egy vonatot</td>
+          <td style="text-align: center;">204</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>
+            <code>"/api/trains/"</code>
+          </td>
+          <td>az összes vonatot törli</td>
+          <td style="text-align: center;">204</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>A <code>Train</code> entitás adatai az adatbázisban a <code>trains</code> táblában tárolódnak.</p>
+    <hr />
+    <h3 id="passenger-utas">Passenger - utas</h3>
+    <p>A <code>Passenger</code> entitás a következő attribútumokkal rendelkezik:</p>
+    <ul>
+      <li>
+        <code>id</code> (az utas egyedi azonosítója)</li>
+      <li>
+        <code>name</code> (az utas neve, nem lehet <code>null</code> és üres, valamint <code>String</code> típusú, legfeljebb 255 karakter hosszú.)</li>
+      <li>
+        <code>dateOfBirth</code> (az utas születési ideje (az utazási kedvezményhez szükséges), nem lehet <code>null</code> és <code>LocalDate</code> típusú.)</li>
+      <li>
+        <code>tickets</code> (az utas által birtokolt jegyek listája, <code>List&lt;Ticket&gt;</code> típusú és OneToMany kétirányú kapcsolatban áll <code>Ticket</code> entitással.)</li>
+    </ul>
+    <p>A következő végpontokon érjük el az entitást:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>HTTP metódus</th>
+          <th>Végpont</th>
+          <th>Leírás</th>
+          <th style="text-align: center;">HTTP Response státusz</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>
+            <code>"/api/passengers"</code>
+          </td>
+          <td>lekérdezi az összes utast</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>
+            <code>"/api/passengers/{id}"</code>
+          </td>
+          <td>lekérdez egy utast <code>id</code> alapján</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td>
+            <code>"/api/passengers"</code>
+          </td>
+          <td>létrehoz egy utast</td>
+          <td style="text-align: center;">201</td>
+        </tr>
+        <tr>
+          <td>PUT</td>
+          <td>
+            <code>"/api/passengers/{id}"</code>
+          </td>
+          <td>módosít egy utast <code>id</code> alapján</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>
+            <code>"/api/passengers/{id}"</code>
+          </td>
+          <td>
+            <code>id</code> alapján kitöröl egy utast</td>
+          <td style="text-align: center;">204</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>
+            <code>"/api/passengers/"</code>
+          </td>
+          <td>az összes utast törli</td>
+          <td style="text-align: center;">204</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>A <code>Passenger</code> entitás adatai az adatbázisban a <code>passengers</code> táblában tárolódnak.</p>
+    <hr />
+    <h3 id="discounts-kedvezmenyek">Discounts - kedvezmények</h3>
+    <p>Az applikáción keresztül nem módosítható, induláskor az adatbázis már tartalmazza ezeket az értékeket.</p>
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: center;">Életkortól</th>
+          <th style="text-align: center;">Életkorig</th>
+          <th style="text-align: center;">Kedvezmény mértéke</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: center;">0</td>
+          <td style="text-align: center;">6</td>
+          <td style="text-align: center;">100 %</td>
+        </tr>
+        <tr>
+          <td style="text-align: center;">6</td>
+          <td style="text-align: center;">14</td>
+          <td style="text-align: center;">50 %</td>
+        </tr>
+        <tr>
+          <td style="text-align: center;">14</td>
+          <td style="text-align: center;">26</td>
+          <td style="text-align: center;">33 %</td>
+        </tr>
+        <tr>
+          <td style="text-align: center;">27</td>
+          <td style="text-align: center;">65</td>
+          <td style="text-align: center;">0 %</td>
+        </tr>
+        <tr>
+          <td style="text-align: center;">65</td>
+          <td style="text-align: center;">99999</td>
+          <td style="text-align: center;">100 %</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>A <code>Discount</code> entitás a következő attribútumokkal rendelkezik:</p>
+    <ul>
+      <li>
+        <code>id</code> (a kedvezmény egyedi azonosítója.)</li>
+      <li>
+        <code>fromAge</code> (életkortól, típusa <code>integer</code> értéke nem lehet negatív.)</li>
+      <li>
+        <code>toAge</code> (életkorig, típusa <code>integer</code> értéke nem lehet negatív.)</li>
+      <li>
+        <code>discountValue</code> (a kedvezmény mértéke százalékban, típusa <code>integer</code> értéke nem lehet negatív.)</li>
+    </ul>
+    <p>következő végpontokon érjük el az entitást:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>HTTP metódus</th>
+          <th>Végpont</th>
+          <th>Leírás</th>
+          <th style="text-align: center;">HTTP Response státusz</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>
+            <code>"/api/discounts"</code>
+          </td>
+          <td>lekérdezi az összes kedvezményt</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>
+            <code>"/api/discounts/age"</code>
+          </td>
+          <td>age paraméterrel lekérdezhető a kedvezmény</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>
+            <code>"/api/discounts/{id}"</code>
+          </td>
+          <td>lekérdez egy kedvezményt <code>id</code> alapján</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+      </tbody>
+    </table>
+    <hr />
+    <h3 id="ticket-jegy">Ticket - jegy</h3>
+    <p>A <code>Ticket</code> entitás a következő attribútumokkal rendelkezik:</p>
+    <ul>
+      <li>
+        <code>id</code> (az utas egyedi azonosítója)</li>
+      <li>
+        <code>fullPrice</code> (a jegy teljes ára,  típusa <code>double</code> értéke nem lehet negatív.)</li>
+      <li>
+        <code>priceWithDiscount</code> (a jegy kedvezményes ára,  típusa <code>double</code> értéke nem lehet negatív.)</li>
+      <li>
+        <code>passenger</code> (ManyToOne kétirányú kapcsolatban áll <code>Passenger</code> entitással.)</li>
+      <li>
+        <code>train</code> (ManyToOne kétirányú kapcsolatban áll a <code>Train</code> entitással.)</li>
+      <li>
+        <code>discount</code> (ManyToOne kétirányú kapcsolatban áll a <code>Discount</code> entitással.)</li>
+    </ul>
+    <p>A következő végpontokon érjük el az entitást:</p>
+    <table>
+      <thead>
+        <tr>
+          <th>HTTP metódus</th>
+          <th>Végpont</th>
+          <th>Leírás</th>
+          <th style="text-align: center;">HTTP Response státusz</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>GET</td>
+          <td>
+            <code>"/api/tickets"</code>
+          </td>
+          <td>lekérdezi az összes jegyet</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>
+            <code>"/api/tickets/{id}"</code>
+          </td>
+          <td>lekérdez egy jegyet <code>id</code> alapján</td>
+          <td style="text-align: center;">202</td>
+        </tr>
+        <tr>
+          <td>POST</td>
+          <td>
+            <code>"/api/passengers"</code>
+          </td>
+          <td>létrehoz egy jegyet</td>
+          <td style="text-align: center;">201</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>
+            <code>"/api/tickets/{id}"</code>
+          </td>
+          <td>
+            <code>id</code> alapján kitöröl egy jegyet</td>
+          <td style="text-align: center;">204</td>
+        </tr>
+        <tr>
+          <td>DELETE</td>
+          <td>
+            <code>"/api/tickets/"</code>
+          </td>
+          <td>az összes jegyet törli</td>
+          <td style="text-align: center;">204</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 id="a-ticket-entitas-adatai-az-adatbazisban-a-tickets-tablaban-tarolodnak">A <code>Ticket</code> entitás adatai az adatbázisban a <code>tickets</code> táblában tárolódnak.</h2>
+    <h2 id="technologiai-reszletek">Technológiai részletek</h2>
+    <p>Ez egy klasszikus háromrétegű webes alkalmazás, controller, service és repository
+réteggel, entitásonként a rétegeknek megfelelően elnevezett osztályokkal. A megvalósítás
+Java programnyelven, Spring Boot használatával történt. Az alkalmazás HTTP kéréseket
+képes fogadni, ezt a RESTful webszolgáltatások segítségével valósítja meg.
+Adattárolásra SQL alapú MariaDB adatbázist használ, melyben a táblákat Flyway hozza létre.
+Az adatbáziskezelés Spring Data JPA technológiával történik. A beérkező adatok validálását a
+Spring Boot <code>spring-boot-starter-validation</code> modulja végzi, az általános hibakezelést pedig
+a <code>problem-spring-web-starter</code> projekt.
+Az alkalmazás tesztelésére WebClient-tel implementált integrációs
+tesztek állnak rendelkezésre, a kipróbálásához pedig az <code>src/test/java</code> könyvtáron belül
+HTTP fájlok, valamint egy részletesen feliratozott Swagger felület. A mellékelt <code>Dockerfile</code>
+segítségével az alkalmazásból Docker image készíthető.</p>
+    <hr />
+    <h2 id="swagger-felulet-es-open-api-link">Swagger felület és Open API link</h2>
+    <p>
+      <a href="http://localhost:8080/swagger-ui.html">Swagger UI</a>
+    </p>
+    <p>
+      <a href="http://localhost:8080/v3/api-docs">Open API</a>
+    </p>
+    <hr />
+    <h2 id="virtualis-halozat-letrehozas">Virtuális hálózat létrehozás</h2>
+    <p>
+      <code>docker network create --driver bridge traintickets-net</code>
+    </p>
+    <h2 id="mariadb-inditasa-dockerben">MariaDb indítása Dockerben</h2>
+    <p>
+      <code>docker run -d -e MYSQL_DATABASE=traintickets -e MYSQL_USER=traintickets -e MYSQL_PASSWORD=traintickets -e MYSQL_ALLOW_EMPTY_PASSWORD=yes --network traintickets-net -p 3306:3306 --name traintickets-mariadb mariadb</code>
+    </p>
+    <h2 id="az-alkalmazas-buildelese">Az alkalmazás buildelése</h2>
+    <p>
+      <code>mvnw clean package</code>
+    </p>
+    <p>
+      <code>docker build -t trainticketsapp .</code>
+    </p>
+    <h2 id="az-alkalmazas-futtatasa-dockerben-mariadb-vel">Az alkalmazás futtatása dockerben MariaDB-vel</h2>
+    <p>
+      <code>docker run -d -e SPRING_DATASOURCE_URL=jdbc:mariadb://traintickets-mariadb/traintickets --network traintickets-net -p 8080:8080 --name trainticketsapp trainticketsapp</code>
+    </p>
+  </body>
+</html>
