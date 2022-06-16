@@ -1,0 +1,16 @@
+body {
+    background-color: black;
+}
+
+.color-purple {
+    color: rgb(144, 138, 174);
+}
+
+.border-purple {
+    border-bottom-color: rgb(144, 138, 174);
+}
+
+code {
+    color: rgb(220, 213, 76);
+    color: rgb(237, 199, 98);
+}
