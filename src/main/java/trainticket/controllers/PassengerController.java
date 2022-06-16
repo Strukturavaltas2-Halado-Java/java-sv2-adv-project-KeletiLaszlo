@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import trainticket.dtos.CreatePassengerCommand;
 import trainticket.dtos.ModifyPassengerCommand;
 import trainticket.dtos.PassengerDto;
-import trainticket.services.PassengerService;
+import trainticket.model.services.PassengerService;
 
 import javax.validation.Valid;
 import java.util.List;

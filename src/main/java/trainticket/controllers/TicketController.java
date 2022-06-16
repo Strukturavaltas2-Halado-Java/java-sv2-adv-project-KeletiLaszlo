@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import trainticket.dtos.CreateTicketCommand;
 import trainticket.dtos.TicketDto;
-import trainticket.services.TicketService;
+import trainticket.model.services.TicketService;
 
 import javax.validation.Valid;
 import java.util.List;

@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import trainticket.dtos.DiscountDto;
 import trainticket.exceptions.IllegalAgeGivenExceptions;
-import trainticket.services.DiscountService;
+import trainticket.model.services.DiscountService;
 
 import java.util.List;
 

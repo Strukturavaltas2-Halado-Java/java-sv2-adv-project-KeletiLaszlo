@@ -1,4 +1,4 @@
-package trainticket.services;
+package trainticket.model.services;
 
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;

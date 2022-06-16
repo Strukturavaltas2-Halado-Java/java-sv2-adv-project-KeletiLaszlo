@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import trainticket.dtos.CreateTrainCommand;
 import trainticket.dtos.ModifyTrainCommand;
 import trainticket.dtos.TrainDto;
-import trainticket.services.TrainService;
+import trainticket.model.services.TrainService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
