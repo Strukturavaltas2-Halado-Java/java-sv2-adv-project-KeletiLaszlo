@@ -1,12 +1,11 @@
 CREATE TABLE IF NOT EXISTS `dicounts`
 (
-    `id`             bigint(20) NOT NULL AUTO_INCREMENT,
-    `discount_value` int(11) DEFAULT NULL,
-    `from_age`       int(11) DEFAULT NULL,
-    `to_age`         int(11) DEFAULT NULL,
+    `id`             bigint NOT NULL AUTO_INCREMENT,
+    `discount_value` int DEFAULT NULL,
+    `from_age`       int DEFAULT NULL,
+    `to_age`         int DEFAULT NULL,
     PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
+);
 
 INSERT INTO `dicounts` (`discount_value`, `from_age`, `to_age`)
 VALUES (100, 0, 6),
