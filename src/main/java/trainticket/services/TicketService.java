@@ -35,7 +35,7 @@ public class TicketService {
     private PassengerRepository passengerRepository;
     private DiscountRepository discountRepository;
 
-    private final int TICKET_PRICE_PER_KM = 25;
+    private static final int TICKET_PRICE_PER_KM = 25;
 
     public List<TicketDto> listAllTickets() {
         Type targetListType = new TypeToken<List<TicketDto>>() {
