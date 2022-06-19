@@ -81,6 +81,7 @@ public class TicketService {
 
         train.addTicket(ticket);
         passenger.addTicket(ticket);
+        discount.addTicket(ticket);
         return modelMapper.map(ticketRepository.save(ticket), TicketDto.class);
     }
 

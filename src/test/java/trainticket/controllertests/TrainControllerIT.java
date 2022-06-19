@@ -435,6 +435,25 @@ class TrainControllerIT {
     }
 
     @Test
+    @DisplayName("Update an existing train with invalid train id")
+    void testModifyTrainInvalid() {
+        ModifyTrainCommand command = new ModifyTrainCommand(
+                "Test Train", TrainType.FAST_TRAIN, LocalDateTime.of(2023,1,1,9,0),"Szolnok",
+                LocalDateTime.of(2023,1,1,10,30),"Budapest",100
+        );
+        Problem problem = webTestClient.put()
+                .uri("/api/trains/{id}", 0)
+                .bodyValue(command)
+                .exchange()
+                .expectStatus().isNotFound()
+                .expectBody(Problem.class)
+                .returnResult().getResponseBody();
+
+        assert problem != null;
+        assertThat(problem.getTitle()).isEqualTo("Train not found");
+    }
+
+    @Test
     @DisplayName("Delete train by id")
     void testDeleteTrainById() {
         webTestClient.delete()

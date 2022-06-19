@@ -35,6 +35,7 @@ import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("Test TicketService")
 class TicketServiceIT {
 
     @Mock
@@ -71,7 +72,7 @@ class TicketServiceIT {
         passengerOne = new Passenger(1L, "John Doe", LocalDate.of(1990, 1, 1), new ArrayList<>());
         passengerTwo = new Passenger(2L, "Jane Doe", LocalDate.of(2010, 1, 1), new ArrayList<>());
 
-        discount = new Discount(1L, 26, 65, 0, null);
+        discount = new Discount(1L, 26, 65, 0, new ArrayList<>());
     }
 
     @Test
