@@ -40,14 +40,24 @@ class TrainControllerIT {
     TrainDto trainTwoDto;
     TrainDto trainThreeDto;
 
+    LocalDateTime startTime;
+    LocalDateTime startTimePlusOneHour;
+    LocalDateTime startTimePlusOneAndHalfHour;
+    LocalDateTime startTimePlusTwoHour;
+
     @BeforeEach
     void init() {
-        Train trainOne = new Train("Fecske", TrainType.PASSENGER_TRAIN, LocalDateTime.of(2023,1,1,9,0),"Cegléd",
-                LocalDateTime.of(2023,1,1,10,0),"Zugló",60);
-        Train trainTwo = new Train("Z56", TrainType.FAST_TRAIN, LocalDateTime.of(2023,1,1,9,0),"Szolnok",
-                LocalDateTime.of(2023,1,1,10,30),"Budapest",100);
-        Train trainThree = new Train("PAVA", TrainType.INTERCITY, LocalDateTime.of(2023,1,1,9,0),"Debrecen",
-                LocalDateTime.of(2023,1,1,12,0),"Budapest",221);
+        startTime = LocalDateTime.now().plusYears(1);
+        startTimePlusOneHour = startTime.plusHours(1);
+        startTimePlusOneAndHalfHour = startTimePlusOneHour.plusMinutes(30);
+        startTimePlusTwoHour = startTime.plusHours(2);
+
+        Train trainOne = new Train("Fecske", TrainType.PASSENGER_TRAIN, startTime,"Cegléd",
+                startTimePlusOneHour,"Zugló",60);
+        Train trainTwo = new Train("Z56", TrainType.FAST_TRAIN, startTime,"Szolnok",
+                startTimePlusOneAndHalfHour,"Budapest",100);
+        Train trainThree = new Train("PAVA", TrainType.INTERCITY, startTime,"Debrecen",
+                startTimePlusTwoHour,"Budapest",221);
 
         trainOneDto = modelMapper.map(trainRepository.save(trainOne), TrainDto.class);
         trainTwoDto = modelMapper.map(trainRepository.save(trainTwo), TrainDto.class);
@@ -94,7 +104,7 @@ class TrainControllerIT {
     @DisplayName("Testing get all trains filter by departure time")
     void testListAllTrainsByDepartureTime() {
         webTestClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/api/trains").queryParam("departureTime","2023-01-01T08:00").build())
+                .uri(uriBuilder -> uriBuilder.path("/api/trains").queryParam("departureTime",startTime.minusHours(1)).build())
                 .exchange()
                 .expectStatus().isAccepted()
                 .expectBodyList(TrainDto.class)
@@ -119,7 +129,7 @@ class TrainControllerIT {
     void testListAllTrainsByDeparturePlaceAndTimeAndArrival() {
         webTestClient.get()
                 .uri(uriBuilder -> uriBuilder.path("/api/trains").queryParam("departurePlace","Cegléd").queryParam("arrivalPlace","Zugló")
-                        .queryParam("departureTime","2023-01-01T08:00").build())
+                        .queryParam("departureTime",startTime.minusHours(1)).build())
                 .exchange()
                 .expectStatus().isAccepted()
                 .expectBodyList(TrainDto.class)
@@ -131,7 +141,7 @@ class TrainControllerIT {
     @DisplayName("Testing get all trains filter by departure place and departure time")
     void testListAllTrainsByDepartureAndDepartureTime() {
         webTestClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/api/trains").queryParam("departurePlace","Szolnok").queryParam("departureTime","2023-01-01T08:00").build())
+                .uri(uriBuilder -> uriBuilder.path("/api/trains").queryParam("departurePlace","Szolnok").queryParam("departureTime",startTime.minusHours(1)).build())
                 .exchange()
                 .expectStatus().isAccepted()
                 .expectBodyList(TrainDto.class)
@@ -143,7 +153,7 @@ class TrainControllerIT {
     @DisplayName("Testing get all trains filter by departure place and departure time")
     void testListAllTrainsByArrivalAndDepartureTime() {
         webTestClient.get()
-                .uri(uriBuilder -> uriBuilder.path("/api/trains").queryParam("arrivalPlace","Budapest").queryParam("departureTime","2023-01-01T08:00").build())
+                .uri(uriBuilder -> uriBuilder.path("/api/trains").queryParam("arrivalPlace","Budapest").queryParam("departureTime",startTime.minusHours(1)).build())
                 .exchange()
                 .expectStatus().isAccepted()
                 .expectBodyList(TrainDto.class)
@@ -411,8 +421,8 @@ class TrainControllerIT {
     @DisplayName("Update an existing train")
     void testModifyTrain() {
         ModifyTrainCommand command = new ModifyTrainCommand(
-                "Test Train", TrainType.FAST_TRAIN, LocalDateTime.of(2023,1,1,9,0),"Szolnok",
-                LocalDateTime.of(2023,1,1,10,30),"Budapest",100
+                "Test Train", TrainType.FAST_TRAIN, startTime,"Szolnok",
+                startTimePlusOneAndHalfHour,"Budapest",100
         );
         webTestClient.put()
                 .uri("/api/trains/{id}", trainTwoDto.getId())
@@ -438,8 +448,8 @@ class TrainControllerIT {
     @DisplayName("Update an existing train with invalid train id")
     void testModifyTrainInvalid() {
         ModifyTrainCommand command = new ModifyTrainCommand(
-                "Test Train", TrainType.FAST_TRAIN, LocalDateTime.of(2023,1,1,9,0),"Szolnok",
-                LocalDateTime.of(2023,1,1,10,30),"Budapest",100
+                "Test Train", TrainType.FAST_TRAIN, startTime,"Szolnok",
+                startTimePlusOneAndHalfHour,"Budapest",100
         );
         Problem problem = webTestClient.put()
                 .uri("/api/trains/{id}", 0)

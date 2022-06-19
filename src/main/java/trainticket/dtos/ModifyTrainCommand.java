@@ -26,7 +26,7 @@ public class ModifyTrainCommand {
 
     @FutureOrPresent(message = "Departure time cannot be int he past")
     @NotNull(message = "Departure time cannot be null")
-    @Schema(description="departure time", example = "2022-06-30T08:00")
+    @Schema(description="departure time", example = "2023-06-30T08:00")
     private LocalDateTime departureTime;
 
     @NotBlank(message = "Departure place cannot be empty")
@@ -35,7 +35,7 @@ public class ModifyTrainCommand {
 
     @FutureOrPresent(message = "Arrival time cannot be int he past")
     @NotNull(message = "Arrival time cannot be null")
-    @Schema(description="arrival time", example = "2022-06-30T09:30")
+    @Schema(description="arrival time", example = "2023-06-30T09:30")
     private LocalDateTime arrivalTime;
 
     @NotBlank(message = "Arrival place cannot be empty")
