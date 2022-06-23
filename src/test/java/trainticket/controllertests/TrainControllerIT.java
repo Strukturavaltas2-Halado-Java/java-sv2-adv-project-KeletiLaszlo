@@ -11,6 +11,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.zalando.problem.Problem;
 import org.zalando.problem.violations.ConstraintViolationProblem;
 import trainticket.dtos.CreateTrainCommand;
+import trainticket.dtos.CreateTrainPeriodicalCommand;
 import trainticket.dtos.ModifyTrainCommand;
 import trainticket.dtos.TrainDto;
 import trainticket.model.Train;
@@ -505,5 +506,42 @@ class TrainControllerIT {
                 .expectStatus().isAccepted()
                 .expectBodyList(TrainDto.class)
                 .hasSize(0);
+    }
+
+    @Test
+    @DisplayName("Test create new train periodically")
+    void testCreateNewTrainPeriodical() {
+        CreateTrainPeriodicalCommand command = new CreateTrainPeriodicalCommand(
+                "Test train", TrainType.PASSENGER_TRAIN,LocalDateTime.now().plusDays(1),"Vác",
+                LocalDateTime.now().plusDays(1).plusMinutes(40),"Budapest",34,1,0,10
+        );
+
+        webTestClient.post()
+                .uri("/api/trains/periodical")
+                .bodyValue(command)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBodyList(TrainDto.class)
+                .hasSize(10)
+                .value(t->assertThat(t).extracting(TrainDto::getNameOfTrain).contains(command.getNameOfTrain()));
+    }
+
+    @Test
+    @DisplayName("Test create new train plus hours and plus minutes are zero")
+    void testCreateNewTrainPeriodicalPlusZero() {
+        CreateTrainPeriodicalCommand command = new CreateTrainPeriodicalCommand(
+                "Test train", TrainType.PASSENGER_TRAIN,LocalDateTime.now().plusDays(1),"Vác",
+                LocalDateTime.now().plusDays(1).plusMinutes(40),"Budapest",34,0,0,10
+        );
+
+        Problem problem = webTestClient.post()
+                .uri("/api/trains/periodical")
+                .bodyValue(command)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody(Problem.class)
+                .returnResult().getResponseBody();
+
+        assertThat(problem.getDetail()).isEqualTo("The plus hours(0) and the plus minutes(0) cannot be zero at the same time.");
     }
 }

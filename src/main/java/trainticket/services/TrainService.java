@@ -7,9 +7,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import trainticket.dtos.CreateTrainCommand;
+import trainticket.dtos.CreateTrainPeriodicalCommand;
 import trainticket.dtos.ModifyTrainCommand;
 import trainticket.dtos.TrainDto;
 import trainticket.exceptions.IllegalTimesGivenExceptions;
+import trainticket.exceptions.InvalidPeriodTimeGivenException;
 import trainticket.exceptions.TrainConstraintFailsException;
 import trainticket.exceptions.TrainNotFoundException;
 import trainticket.model.Train;
@@ -18,6 +20,7 @@ import trainticket.repositories.TrainRepository;
 import javax.transaction.Transactional;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,5 +97,37 @@ public class TrainService {
         if (departureTime.isAfter(arrivalTime)) {
             throw new IllegalTimesGivenExceptions(departureTime, arrivalTime);
         }
+    }
+
+    public List<TrainDto> createTrainPeriodical(CreateTrainPeriodicalCommand createTrainPeriodicalCommand) {
+        validateTimes(createTrainPeriodicalCommand.getDepartureTime(), createTrainPeriodicalCommand.getArrivalTime());
+        int plusHours = createTrainPeriodicalCommand.getPlusHours();
+        int plusMinutes = createTrainPeriodicalCommand.getPlusMinutes();
+        int period = createTrainPeriodicalCommand.getNumberOfPeriods();
+
+        LocalDateTime startTime = createTrainPeriodicalCommand.getDepartureTime();
+        LocalDateTime endTime = createTrainPeriodicalCommand.getArrivalTime();
+
+        if (plusHours == 0 && plusMinutes == 0) {
+            throw new InvalidPeriodTimeGivenException(plusHours, plusMinutes);
+        }
+
+        Type targetListType = new TypeToken<List<TrainDto>>(){}.getType();
+        List<Train> newTrains = new ArrayList<>();
+        for (int i = 0; i < period; i++) {
+            Train train = new Train(
+                    createTrainPeriodicalCommand.getNameOfTrain(),
+                    createTrainPeriodicalCommand.getTrainType(),
+                    startTime,
+                    createTrainPeriodicalCommand.getDeparturePlace(),
+                    endTime,
+                    createTrainPeriodicalCommand.getArrivalPlace(),
+                    createTrainPeriodicalCommand.getDistance()
+            );
+            startTime = startTime.plusHours(plusHours).plusMinutes(plusMinutes);
+            endTime = endTime.plusHours(plusHours).plusMinutes(plusMinutes);
+            newTrains.add(repository.save(train));
+        }
+        return modelMapper.map(newTrains, targetListType);
     }
 }

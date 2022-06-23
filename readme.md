@@ -25,14 +25,15 @@ A `Train` entitás a következő attribútumokkal rendelkezik:
 
 A következő végpontokon érjük el az entitást:
 
-| HTTP metódus | Végpont              | Leírás                            |  HTTP Response státusz  |
-|--------------|----------------------|-----------------------------------|:-----------------------:|
-| GET          | `"/api/trains"`      | lekérdezi az összes vonatot       |           202           |       
-| GET          | `"/api/trains/{id}"` | lekérdez egy vonatot `id` alapján |           202           |       
-| POST         | `"/api/trains"`      | létrehoz egy vonatot              |           201           |       
-| PUT          | `"/api/trains/{id}"` | módosít egy vonatot `id` alapján  |           202           |       
-| DELETE       | `"/api/trains/{id}"` | `id` alapján kitöröl egy vonatot  |           204           |       
-| DELETE       | `"/api/trains/"`     | az összes vonatot törli           |           204           |       
+| HTTP metódus | Végpont                    | Leírás                                              |  HTTP Response státusz  |
+|--------------|----------------------------|-----------------------------------------------------|:-----------------------:|
+| GET          | `"/api/trains"`            | lekérdezi az összes vonatot                         |           202           |       
+| GET          | `"/api/trains/{id}"`       | lekérdez egy vonatot `id` alapján                   |           202           |       
+| POST         | `"/api/trains"`            | létrehoz egy vonatot                                |           201           |       
+| POST         | `"/api/trains/periodical"` | létrehoz megadott számú periódikusan induló vonatot |           201           |
+| PUT          | `"/api/trains/{id}"`       | módosít egy vonatot `id` alapján                    |           202           |       
+| DELETE       | `"/api/trains/{id}"`       | `id` alapján kitöröl egy vonatot                    |           204           |       
+| DELETE       | `"/api/trains/"`           | az összes vonatot törli                             |           204           |       
 
 A `Train` entitás adatai az adatbázisban a `trains` táblában tárolódnak.
 

@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import trainticket.dtos.CreateTrainCommand;
+import trainticket.dtos.CreateTrainPeriodicalCommand;
 import trainticket.dtos.ModifyTrainCommand;
 import trainticket.dtos.TrainDto;
 import trainticket.services.TrainService;
@@ -68,6 +69,16 @@ public class TrainController {
             description = "Created")
     public TrainDto createTrain(@Valid @RequestBody CreateTrainCommand createTrainCommand) {
         return service.createTrain(createTrainCommand);
+    }
+
+    @PostMapping("/periodical")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create train periodical",
+            description = "Create new train periodical.")
+    @ApiResponse(responseCode = "201",
+            description = "Created")
+    public List<TrainDto> createTrainPeriodical(@Valid @RequestBody CreateTrainPeriodicalCommand createTrainPeriodicalCommand) {
+        return service.createTrainPeriodical(createTrainPeriodicalCommand);
     }
 
     @PutMapping("/{id}")
